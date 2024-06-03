@@ -6,6 +6,7 @@ import 'package:flutter_ai_clock_project/menu_info.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import 'alarmpage.dart';
 import 'clock_view.dart';
 import 'data.dart';
 
@@ -49,16 +50,18 @@ class _HomepageState extends State<HomePage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.blue,
+      //backgroundColor: Colors.blue,
       body: SafeArea(
         child: Column(
           children: [
             Consumer<MenuInfo>(
               builder: (BuildContext context, MenuInfo value, Widget? child) {
-                if (value.menuType != MenuType.clock) return Container();
+                if (value.menuType == MenuType.alarm) return AlarmPage();
                 return Column(
                   children: [
-                    SizedBox(height: 25,),
+                    SizedBox(
+                      height: 25,
+                    ),
                     Container(
                       alignment: Alignment.center,
                       color: Colors.blue,
@@ -76,7 +79,8 @@ class _HomepageState extends State<HomePage> {
                       decoration: BoxDecoration(
                         color: Colors.white,
                         // Set background color
-                        border: Border.all(color: Colors.blueAccent, width: 5.0),
+                        border:
+                            Border.all(color: Colors.blueAccent, width: 5.0),
                         // Add border
                         borderRadius: BorderRadius.circular(15.0),
                         // Rounded corners
@@ -145,7 +149,8 @@ class _HomepageState extends State<HomePage> {
                                 Text(
                                   'Use 24-hour format',
                                   style: TextStyle(
-                                      fontSize: 18.0, fontWeight: FontWeight.bold),
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold),
                                 ),
                                 Switch(
                                   value: true,
@@ -161,7 +166,8 @@ class _HomepageState extends State<HomePage> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8.0), // Add some vertical space
+                            const SizedBox(height: 8.0),
+                            // Add some vertical space
                             Text(_currentTime1),
                           ],
                         ),
@@ -170,11 +176,15 @@ class _HomepageState extends State<HomePage> {
                   ],
                 );
               },
-
             ),
-
+            SizedBox(
+              height: 10,
+            ),
             Divider(
               color: Colors.white54,
+              height: 10,
+            ),
+            SizedBox(
               height: 10,
             ),
             Container(
@@ -183,12 +193,12 @@ class _HomepageState extends State<HomePage> {
               height: 110,
               color: Colors.white54,
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: menuItems
-                    .map((currentMenuInfo) => buildTextButton(currentMenuInfo))
-                    .toList()),
-              ),
-
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: menuItems
+                      .map(
+                          (currentMenuInfo) => buildTextButton(currentMenuInfo))
+                      .toList()),
+            ),
           ],
         ),
       ),
@@ -202,25 +212,28 @@ class _HomepageState extends State<HomePage> {
         builder: (BuildContext context, MenuInfo value, Widget? child) {
           return TextButton(
             style: TextButton.styleFrom(
-              backgroundColor:currentMenuInfo.menuType == value.menuType? Colors.green: Colors.transparent,),
+              backgroundColor: currentMenuInfo.menuType == value.menuType
+                  ? Colors.green
+                  : Colors.transparent,
+            ),
             onPressed: () {
               var menuInfo = Provider.of<MenuInfo>(context, listen: false);
               menuInfo.updateMenu(currentMenuInfo);
             },
             child: Column(
-
               children: [
-                Image.asset(currentMenuInfo.imageSource, scale: 1.5,),
+                Image.asset(
+                  currentMenuInfo.imageSource,
+                  scale: 1.5,
+                ),
                 Text(
                   currentMenuInfo.title ?? '',
                   style: TextStyle(color: Colors.white, fontSize: 14),
                 ),
               ],
             ),
-
           );
         },
-
       ),
     );
   }

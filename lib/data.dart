@@ -1,6 +1,7 @@
 
 
 
+import 'alarm_info.dart';
 import 'enums.dart';
 import 'menu_info.dart';
 
@@ -10,7 +11,7 @@ List<MenuInfo> menuItems = [
 
 ];
 
-// List<AlarmInfo> alarms = [
-//   AlarmInfo(DateTime.now().add(Duration(hours: 1)), description: 'Office'),
-//   AlarmInfo(DateTime.now().add(Duration(hours: 2)), description: 'Sport'),
-// ];
+List<AlarmInfo> alarms = [
+  AlarmInfo(DateTime.now().add(Duration(hours: 1)), description: 'Office'),
+  AlarmInfo(DateTime.now().add(Duration(hours: 2)), description: 'Sport'),
+];
