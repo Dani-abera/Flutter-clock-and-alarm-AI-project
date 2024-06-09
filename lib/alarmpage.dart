@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_ai_clock_project/local_notifications.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 
+import 'another_page.dart';
 import 'data.dart';
 import 'main.dart';
 
@@ -13,160 +16,186 @@ class AlarmPage extends StatefulWidget {
 
 class _AlarmPageState extends State<AlarmPage> {
   @override
-  Widget build(BuildContext context) {
-    return Container(
-      child: Expanded(
-        child: ListView(
-          children: alarms.map<Widget>((alarm) {
-            return Container(
-              margin: const EdgeInsets.only(bottom: 32),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Colors.yellowAccent, Colors.redAccent],
-                  begin: Alignment.centerLeft,
-                  end: Alignment.centerRight,
-                ),
-                boxShadow: [
-                  BoxShadow(
-                      color: Colors.blue,
-                      blurRadius: 8,
-                      spreadRadius: 2,
-                      offset: Offset(4, 4)),
-                ],
-                borderRadius: BorderRadius.all(Radius.circular(24)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.label,
-                            color: Colors.white,
-                            size: 24,
-                          ),
-                          SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            'Office',
-                            style: TextStyle(
-                              color: Colors.white,
-                            ),
-                          )
-                        ],
-                      ),
-                      Switch(
-                        value: true,
-                        onChanged: (bool value) {},
-                        activeColor: Colors.white,
-                      )
-                    ],
-                  ),
-                  Text(
-                    'Mon-Fri',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '07:00 AM',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w700),
-                      ),
-                      Icon(
-                        Icons.keyboard_arrow_down,
-                        size: 36,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ],
-              ),
-            );
-          }).followedBy(<Widget>[
-            Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.all(Radius.circular(24)),
-                color: Colors.blue,
-              ),
-              height: 100,
-              child: TextButton(
-                onPressed: () {
-                  scheduleAlarm();
-                },
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_alarm_sharp,
-                      size: 50,
-                    ),
-                    SizedBox(
-                      height: 8,
-                    ),
-                    Text(
-                      'Add Alarm',
-                      style: TextStyle(
-                        color: Colors.white,
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
-
-          ]).toList(),
-        ),
-      ),
-    );
+  void initState() {
+    listenToNotifications();
+    super.initState();
   }
 
+  bool _isSwitched = false; // Tracks the current state of the switch
 
-  Future<void> scheduleAlarm() async {
-    // Schedule notification 10 seconds from now
-    var scheduledNotificationTime = DateTime.now().add(Duration(seconds: 10));
+  void _toggleSwitch(bool value) {
+    setState(() {
+      _isSwitched = value;
+    });
+  }
 
-    // Create Android notification details with a valid icon reference
-    var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-      'alarm_notif',
-      'Alarm Notification', // More descriptive channel name
-      channelDescription: 'Channel for Alarm notification',
-      icon: '@mipmap/ic_launcher',
-      // Assuming the image is named 'ic_alarm.png' in drawable
-      sound: RawResourceAndroidNotificationSound('a_long_cold_string'),
-      // String literal
-      largeIcon: DrawableResourceAndroidBitmap(
-          '@mipmap/ic_launcher'), // Assuming the image exists
+  // to listen to any notification clicked or not
+
+  listenToNotifications() {
+    print("Listening to notification");
+    LocalNotifications.onClickNotification.stream.listen((event) {
+      Navigator.push(context,
+          MaterialPageRoute(builder: (context) => AnotherPage(payload: event) ));
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Expanded(
+      flex: 2,
+      child: Column(
+        children: [
+          Padding(
+            padding:
+                const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Alarm',
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 25,
+                  ),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    LocalNotifications.showScheduleNotification(
+                        title: 'simple Notification',
+                        body: 'This is a simple notification ',
+                        payload: 'This is simple data');
+                  },
+                  child: Icon(Icons.add),
+                )
+              ],
+            ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Container(
+            height: 100,
+            width: MediaQuery.of(context).size.width - 20,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 5,
+                )
+              ],
+            ),
+            child: Card(
+                color: Colors.white12, // Optional: Set card background color
+                elevation: 5.0, // Adjust shadow
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      10.0), // Override container's radius if needed
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '8:30 AM',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Switch(
+                            value: true,
+                            activeTrackColor: Colors.lightGreenAccent,
+                            inactiveThumbColor: Colors.grey,
+                            onChanged: (bool value) {},
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Awake!',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                )
+                // Your card content
+                ),
+          ),
+          SizedBox(
+            height: 50,
+          ),
+          Container(
+            height: 100,
+            width: MediaQuery.of(context).size.width - 20,
+            decoration: BoxDecoration(
+              color: Colors.black12,
+              borderRadius: BorderRadius.circular(15.0),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.grey.withOpacity(0.5),
+                  spreadRadius: 3,
+                  blurRadius: 5,
+                )
+              ],
+            ),
+            child: Card(
+                color: Colors.white12, // Optional: Set card background color
+                elevation: 5.0, // Adjust shadow
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(
+                      10.0), // Override container's radius if needed
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            '4:30 AM',
+                            style: TextStyle(
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          Switch(
+                            value: _isSwitched,
+                            activeTrackColor: Colors.lightGreenAccent,
+                            inactiveThumbColor: Colors.grey,
+                            onChanged: _toggleSwitch,
+                          ),
+                        ],
+                      ),
+                      Text(
+                        'Office!',
+                        style: TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.w500),
+                      )
+                    ],
+                  ),
+                )
+                // Your card content
+                ),
+          ),
+          TextButton(
+              onPressed: () {
+                LocalNotifications.cancel(1);
+              },
+              child: Text('Close Periodic Notifcations')),
+          TextButton(
+              onPressed: () {
+                LocalNotifications.cancelAll();
+              },
+              child: Text('Close Periodic Notifcations'))
+        ],
+      ),
     );
-
-    // Create iOS notification details with a valid sound file path
-    var iosPlatformChannelSpecifics = DarwinNotificationDetails(
-      sound: 'a_long_cold_string.wav',
-      // Assuming the sound file is added to your Xcode project
-      presentAlert: true,
-      presentBadge: true,
-      presentSound: true,
-    );
-
-    // Combine platform-specific details for notification
-    var platformChannelSpecifics = NotificationDetails(
-        android: androidPlatformChannelSpecifics,
-        iOS: iosPlatformChannelSpecifics);
-
-    // Schedule the notification with a title and body
-    await flutterLocalNotificationsPlugin.show(
-        0,
-        'Alarm Notification', // Set a title for the notification
-        'Alarm triggered!', // Set a body for the notification
-        platformChannelSpecifics);
   }
 }

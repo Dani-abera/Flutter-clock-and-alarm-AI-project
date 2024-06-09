@@ -47,20 +47,21 @@ class ClockPainter extends CustomPainter {
     var center = Offset(centerX, centerY);
     var radius = min(centerX, centerY);
 
-    var fillBrush = Paint()..color = Color(0xFF444974);
+    var fillBrush = Paint()..color = Color.fromARGB(255, 89, 61, 28);
 
     var outlineBrush = Paint()
-      ..color = Color(0xFFEAECFF)
+      //..color = Color(0xFFEAECFF)
+      ..color = Colors.white
       ..style = PaintingStyle.stroke
       ..strokeWidth = size.width/20;
 
     var centerFillBrush = Paint()..color = Color(0xFFEAECFF);
 
     var dashBrush = Paint()
-    //..color = Color(0xFFEAECFF)
-      ..color = Colors.yellowAccent
-      ..style = PaintingStyle.stroke;
-    //..strokeWidth = 6;
+      ..color = Color(0xFFEAECFF)
+      //..color = Color(0xff1C3657)
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
 
     var secHandBrush = Paint()
       ..color = Colors.orange

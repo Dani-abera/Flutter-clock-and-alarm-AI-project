@@ -6,8 +6,8 @@ import 'enums.dart';
 import 'menu_info.dart';
 
 List<MenuInfo> menuItems = [
-  MenuInfo(MenuType.clock,title: 'Clock', imageSource: 'images/clock_icon.png'),
-  MenuInfo(MenuType.alarm,title: 'Alarm', imageSource: 'images/alarm_icon.png'),
+  MenuInfo(MenuType.clock,title: 'Clock', imageSource: 'images/icons8-clock-48.png'),
+  MenuInfo(MenuType.alarm,title: 'Alarm', imageSource: 'images/icons8-clock-48.png'),
 
 ];
 
