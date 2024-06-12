@@ -6,6 +6,7 @@ import 'package:flutter_alarm_clock/flutter_alarm_clock.dart';
 import 'another_page.dart';
 import 'data.dart';
 import 'main.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class AlarmPage extends StatefulWidget {
   const AlarmPage({super.key});
@@ -51,7 +52,7 @@ class _AlarmPageState extends State<AlarmPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   'Alarm',
                   style: TextStyle(
                     fontWeight: FontWeight.bold,
@@ -60,7 +61,7 @@ class _AlarmPageState extends State<AlarmPage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    LocalNotifications.showScheduleNotification(
+                    LocalNotifications.showSimpleNotification(
                         title: 'simple Notification',
                         body: 'This is a simple notification ',
                         payload: 'This is simple data');
@@ -70,7 +71,7 @@ class _AlarmPageState extends State<AlarmPage> {
               ],
             ),
           ),
-          SizedBox(
+          const SizedBox(
             height: 50,
           ),
           Container(
@@ -188,12 +189,12 @@ class _AlarmPageState extends State<AlarmPage> {
               onPressed: () {
                 LocalNotifications.cancel(1);
               },
-              child: Text('Close Periodic Notifcations')),
+              child: const Text('Close Periodic Notifcations')),
           TextButton(
               onPressed: () {
                 LocalNotifications.cancelAll();
               },
-              child: Text('Close Periodic Notifcations'))
+              child: const Text('Close Periodic Notifcations'))
         ],
       ),
     );
