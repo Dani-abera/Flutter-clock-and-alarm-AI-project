@@ -48,6 +48,8 @@ dependencies:
   alarm: ^3.1.4
   rxdart: ^0.27.7
   audioplayers: ^6.0.0
+  sqflite: ^2.3.3+1
+  dotted_border: ^2.1.0
 
 dev_dependencies:
   flutter_test:
